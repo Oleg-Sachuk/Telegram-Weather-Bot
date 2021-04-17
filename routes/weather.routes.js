@@ -37,10 +37,15 @@ router.post('/current', async (req, res) => {
                 return response.json();
             })
             .then(text => {
-                if(userId) bot.sendMessage(userId,`Weather in ${text.name}: ${text.weather[0].main} (${text.weather[0].description}) temperature is: ${text.main.temp} (feels like: ${text.main.feels_like})`)
-                data = text;
-                console.log(`Weather in ${text.name}: ${text.weather[0].main} (${text.weather[0].description}) temperature is: ${text.main.temp} (feels like: ${text.main.feels_like})`);
-                res.status(200).json(data)
+                if(userId) {
+                    console.log(`Weather in ${text.name}: ${text.weather[0].main} (${text.weather[0].description}) temperature is: ${Math.round(text.main.temp -273.15)} (feels like: ${Math.round(text.main.feels_like -273.15)})`);
+                    bot.sendMessage(userId,`Weather in ${text.name}: ${text.weather[0].main} (${text.weather[0].description}) temperature is: ${Math.round(text.main.temp -273.15)} (feels like: ${Math.round(text.main.feels_like -273.15)})`)
+                    res.status(200).json(userId);
+                } else {
+                    data = text;
+                    console.log(`Weather in ${text.name}: ${text.weather[0].main} (${text.weather[0].description}) temperature is: ${Math.round(text.main.temp -273.15)} (feels like: ${Math.round(text.main.feels_like -273.15)})`);
+                    res.status(200).json(data)
+                }
             })
             .catch(err => console.error(err));
     } catch (error) {

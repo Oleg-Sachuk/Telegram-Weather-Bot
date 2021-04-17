@@ -41,6 +41,7 @@
   height: 31px;
   background: yellow;
   border: none;
+  cursor: pointer;
 }
 
 .city {
