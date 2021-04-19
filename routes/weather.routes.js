@@ -5,6 +5,7 @@ const router = Router();
 const telegramBot = require('node-telegram-bot-api');
 
 let userId = null;
+let userName = null;
 
 const bot = new telegramBot(config.get('Botkey'), {
     polling: {
@@ -19,6 +20,7 @@ const bot = new telegramBot(config.get('Botkey'), {
 bot.on('message', (msg) => {
     const { id } = msg.chat;
     userId = msg.chat.id
+    userName = msg.from.first_name
     bot.sendMessage(id, `Hello ${JSON.stringify(msg.from.first_name)}`)
 })
 
@@ -40,7 +42,7 @@ router.post('/current', async (req, res) => {
                 if(userId) {
                     console.log(`Weather in ${text.name}: ${text.weather[0].main} (${text.weather[0].description}) temperature is: ${Math.round(text.main.temp -273.15)} (feels like: ${Math.round(text.main.feels_like -273.15)})`);
                     bot.sendMessage(userId,`Weather in ${text.name}: ${text.weather[0].main} (${text.weather[0].description}) temperature is: ${Math.round(text.main.temp -273.15)} (feels like: ${Math.round(text.main.feels_like -273.15)})`)
-                    res.status(200).json(userId);
+                    res.status(200).json(userName);
                 } else {
                     data = text;
                     console.log(`Weather in ${text.name}: ${text.weather[0].main} (${text.weather[0].description}) temperature is: ${Math.round(text.main.temp -273.15)} (feels like: ${Math.round(text.main.feels_like -273.15)})`);
